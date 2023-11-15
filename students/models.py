@@ -55,7 +55,7 @@ class Schedule(models.Model):
 
     class Meta:
         verbose_name = "расписание"
-        verbose_name_plural = "расписания"
+        verbose_name_plural = "расписание"
 
     def __str__(self):
         return f'{self.student} {self.week_days} {self.time}'
