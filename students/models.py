@@ -1,5 +1,5 @@
 from django.db import models
-
+from multiselectfield import MultiSelectField
 
 DAYS_OF_THE_WEEK = (
            ("MON", "Понедельник"),
@@ -48,7 +48,7 @@ class Lesson(models.Model):
 
 
 class Schedule(models.Model):
-    week_days = models.CharField(verbose_name='День недели', max_length=20, choices=DAYS_OF_THE_WEEK)
+    week_days = MultiSelectField(verbose_name='День недели', max_length=20, choices=DAYS_OF_THE_WEEK)
     time = models.TimeField(verbose_name='Время занятия')
     lessons_left = models.IntegerField(verbose_name='Занятий осталось')
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
