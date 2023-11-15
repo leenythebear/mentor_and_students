@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from students.models import Student, Schedule
+from students.models import Student, Schedule, Lesson
 
 
 class ScheduleInline(admin.TabularInline):
@@ -21,3 +21,17 @@ class StudentAdmin(admin.ModelAdmin):
         "parent_name",
     ]
     inlines = [ScheduleInline]
+
+
+@admin.register(Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    search_fields = [
+        "date",
+        "time",
+        "done"
+    ]
+    list_display = [
+        "date",
+        "time",
+        "student"
+    ]
