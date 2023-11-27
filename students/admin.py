@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 
 from students.models import Student, Schedule, Lesson
 
@@ -23,8 +24,15 @@ class StudentAdmin(admin.ModelAdmin):
     inlines = [ScheduleInline]
 
 
+class LessonAdminForm(forms.ModelForm):
+    class Meta:
+        model = Lesson
+        fields = '__all__'
+
+
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
+    form = LessonAdminForm
     search_fields = [
         "date",
         "time",
@@ -33,5 +41,6 @@ class LessonAdmin(admin.ModelAdmin):
     list_display = [
         "date",
         "time",
-        "student"
+        "student",
+        "done"
     ]
