@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from students.common_helper import get_start_dates, generate_lessons
@@ -11,4 +11,9 @@ def create_related_objects(sender, instance, created, **kwargs):
         start_dates = get_start_dates(instance)
         dates = generate_lessons(instance.lessons_left, start_dates)
         for date in dates:
-            Lesson.objects.create(date=date, time=instance.time, student=instance.student)
+            Lesson.objects.create(date=date, time=instance.time, student=instance.student, schedule=instance)
+
+
+@receiver(pre_delete, sender=Schedule)
+def delete_lessons_with_schedule(sender, instance, **kwargs):
+    Lesson.objects.filter(schedule=instance, done=False).delete()
