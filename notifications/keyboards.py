@@ -17,4 +17,12 @@ def future_lessons_keyboard():
 
     return InlineKeyboardMarkup(keyboard)
 
-        return InlineKeyboardMarkup(keyboard)
+
+def lessons_keyboard(lessons):
+    keyboard = [[
+        InlineKeyboardButton(
+            f"{lesson.time} - {lesson.student.first_name} {lesson.student.last_name}",
+            callback_data=f"{lesson.pk}")
+    ] for lesson in lessons]
+    keyboard.append([InlineKeyboardButton("Назад", callback_data="future_lessons")])
+    return InlineKeyboardMarkup(keyboard)
