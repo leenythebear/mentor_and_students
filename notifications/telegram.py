@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import CallbackContext, Updater, ConversationHandler, CommandHandler, CallbackQueryHandler
 
-from notifications.keyboards import main_menu_keyboard, future_lessons_keyboard
+from notifications.db_functions import get_today_lessons, get_tomorrow_lessons, get_day_after_tomorrow_lessons
+from notifications.keyboards import main_menu_keyboard, future_lessons_keyboard, lessons_keyboard
 
 (
     ROLE,
@@ -35,10 +36,44 @@ def get_future_lessons(update: Update, context: CallbackContext):
     return FUTURE_LESSONS
 
 
-def get_todays_lessons(update: Update, context: CallbackContext):
+def show_today_lessons(update: Update, context: CallbackContext):
     query = update.callback_query
-    message = "Сегодня урок в 12:45 МСК"
-    keyboard = future_lessons_keyboard()
+    user_id = update.effective_user['id']
+
+    today_lessons = get_today_lessons(user_id)
+    keyboard = lessons_keyboard(today_lessons)
+    message = "Ваши сегодняшние уроки:"
+
+    query.edit_message_text(
+        message,
+        reply_markup=keyboard
+    )
+    return FUTURE_LESSONS
+
+
+def show_tomorrow_lessons(update: Update, context: CallbackContext):
+    query = update.callback_query
+    user_id = update.effective_user['id']
+
+    tomorrow_lessons = get_tomorrow_lessons(user_id)
+    keyboard = lessons_keyboard(tomorrow_lessons)
+    message = "Ваши завтрашние уроки:"
+
+    query.edit_message_text(
+        message,
+        reply_markup=keyboard
+    )
+    return FUTURE_LESSONS
+
+
+def show_day_after_tomorrow_lessons(update: Update, context: CallbackContext):
+    query = update.callback_query
+    user_id = update.effective_user['id']
+
+    tomorrow_lessons = get_day_after_tomorrow_lessons(user_id)
+    keyboard = lessons_keyboard(tomorrow_lessons)
+    message = "Ваши уроки послезавтра:"
+
     query.edit_message_text(
         message,
         reply_markup=keyboard
@@ -60,7 +95,11 @@ def start_bot():
                 ],
             FUTURE_LESSONS:
                 [
-                    CallbackQueryHandler(get_todays_lessons, pattern='today'),
+                    CallbackQueryHandler(main_menu, pattern='main_menu'),
+                    CallbackQueryHandler(get_future_lessons, pattern='future_lessons'),
+                    CallbackQueryHandler(show_today_lessons, pattern='today'),
+                    CallbackQueryHandler(show_tomorrow_lessons, pattern='tomorrow'),
+                    CallbackQueryHandler(show_day_after_tomorrow_lessons, pattern='2_days'),
                 ]
         },
         fallbacks=[
