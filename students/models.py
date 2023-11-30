@@ -37,6 +37,7 @@ class Schedule(models.Model):
     time = models.TimeField(verbose_name='Время занятия')
     lessons_left = models.IntegerField(verbose_name='Занятий осталось')
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    mentor = models.ForeignKey(Mentor, on_delete=models.PROTECT)
 
     class Meta:
         verbose_name = "расписание"

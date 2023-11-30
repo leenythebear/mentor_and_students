@@ -1,3 +1,15 @@
 from django.contrib import admin
 
-# Register your models here.
+from mentors.models import Mentor
+
+
+@admin.register(Mentor)
+class MentorAdmin(admin.ModelAdmin):
+    search_fields = [
+        "first_name",
+        "last_name"
+    ]
+    list_display = [
+        "first_name",
+        "last_name",
+    ]
