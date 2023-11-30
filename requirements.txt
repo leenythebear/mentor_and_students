@@ -1,2 +1,4 @@
 Django==4.2.7
 django-multiselectfield==0.1.12
+python-telegram-bot==13.13
+python-dotenv==1.0.0
