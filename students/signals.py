@@ -11,7 +11,13 @@ def create_related_objects(sender, instance, created, **kwargs):
         start_dates = get_start_dates(instance)
         dates = generate_lessons(instance.lessons_left, start_dates)
         for date in dates:
-            Lesson.objects.create(date=date, time=instance.time, student=instance.student, schedule=instance)
+            Lesson.objects.create(
+                date=date,
+                time=instance.time,
+                student=instance.student,
+                schedule=instance,
+                mentor=instance.mentor
+            )
 
 
 @receiver(pre_delete, sender=Schedule)
