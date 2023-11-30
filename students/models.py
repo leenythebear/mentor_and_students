@@ -1,6 +1,8 @@
 from django.db import models
 from multiselectfield import MultiSelectField
 
+from mentors.models import Mentor
+
 DAYS_OF_THE_WEEK = (
            ("MON", "Понедельник"),
            ("TUE", "Вторник"),
@@ -53,6 +55,7 @@ class Lesson(models.Model):
     homework = models.CharField(verbose_name='Домашнее задание', max_length=300, null=True, blank=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     schedule = models.ForeignKey(Schedule, on_delete=models.SET_NULL, null=True, blank=True)
+    mentor = models.ForeignKey(Mentor, on_delete=models.PROTECT)
 
     class Meta:
         verbose_name = "занятие"
